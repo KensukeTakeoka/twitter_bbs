@@ -1,4 +1,28 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?php
+	session_start();
+
+	if(!empty($_POST)) {
+		//エラー項目の確認
+		if($_POST['name'] == '') {
+			$error['name'] = 'blank';
+		}
+	if($_POST['email'] == '') {
+		$error['email'] = 'blank';
+	}
+	if(strlen($_POST['password']) < 4) {
+		$error['password'] = 'length';
+	}
+	if($_POST['password'] == '') {
+		$error['password'] = 'blank';
+	}
+
+	if(empty($error)) {
+		$_SESSION['join'] = $_POST;
+		header('Location: check.php');
+		exit();
+	}
+}
+?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -14,11 +38,14 @@
 
 <div id="content">
 <p>次のフォームに必要事項をご記入ください。</p>
-<form action="check.html" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data">
 	<dl>
 		<dt>ニックネーム<span class="required">必須</span></dt>
 		<dd>
 			<input type="text" name="name" size="35" maxlength="255" />
+			<?php if (isset($error['name']) && ($error['name'] == 'blank')): ?>
+				<p class="error">* ニックネームを入力してください</p>
+			<?php endif; ?>
 		</dd>
 		<dt>メールアドレス<span class="required">必須</span></dt>
 		<dd>
